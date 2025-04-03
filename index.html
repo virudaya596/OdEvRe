@@ -4,8 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OdEvRe Cipher Encoder</title>
     <link rel="icon" href="OdEvRe.png" type="image/png">
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <style>
         body {
             font-family: 'Orbitron', sans-serif;
@@ -113,6 +111,8 @@
         <button onclick="copyToClipboard()"><ion-icon name="clipboard-outline"></ion-icon></button>
     </div>
     <div id="steps"></div><script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     function encodeText() {
         let input = document.getElementById('inputText').value;
         let { encoded, steps } = encodeOdEvRe(input);
