@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OdEvRe Cipher Encoder</title>
+    <link rel="icon" href="OdEvRe.png" type="image/png">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            padding: 20px;
+            height: 100vh;
+            background: linear-gradient(45deg, #000, #222, #444);
+            background-size: cover;
+            color: #ff4444;
+            overflow: scroll;
+            animation: backgroundAnimation 10s infinite alternate;
+        }@keyframes backgroundAnimation {
+        0% { background-position: left; }
+        100% { background-position: right; }
+    }
+
+    input, button {
+        margin: 10px;
+        padding: 12px;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        color: #ff4444;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    input {
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 0 10px #ff4444;
+    }
+
+    input:focus {
+        box-shadow: 0 0 20px #ff4444;
+    }
+
+    button {
+        cursor: pointer;
+        box-shadow: 0 0 10px #ff4444;
+    }
+
+    button:hover {
+        background: #ff4444;
+        color: white;
+        box-shadow: 0 0 20px #ff4444;
+    }
+
+    #outputContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #output {
+        font-weight: bold;
+        white-space: pre-wrap;
+        padding: 10px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 15px #ff4444;
+        max-width: 400px;
+        display: inline-block;
+    }
+
+    #steps {
+        font-weight: bold;
+        margin-top: 20px;
+        white-space: pre-wrap;
+        text-align: left;
+        padding: 20px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 15px #ff4444;
+        width: 80%;
+        max-width: 500px;
+        margin: auto;
+    }
+
+    #logo {
+        width: 100px;
+        height: auto;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 0 15px #ff4444);
+        animation: floating 3s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+</style>
+
+</head>
+<body>
+    <img id="logo" src="OdEvRe.png" alt="OdEvRe Logo">
+    <h2>OdEvRe Cipher Encoder</h2>
+    <input type="text" id="inputText" placeholder="Enter text...">
+    <button onclick="encodeText()">Encode</button>
+    <div id="outputContainer">
+        <div id="output"></div>
+        <button onclick="copyToClipboard()">📋 Copy</button>
+    </div>
+    <div id="steps"></div><script>
+    function encodeText() {
+        let input = document.getElementById('inputText').value;
+        let { encoded, steps } = encodeOdEvRe(input);
+        displayOutput("Encoded: " + encoded);
+        displaySteps("Steps:\n" + steps);
+    }
+
+    function encodeOdEvRe(text) {
+        let result = '';
+        let steps = '';
+        
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            if (char.match(/[a-zA-Z]/)) {
+                let code = char.charCodeAt(0);
+                let original = char;
+                
+                if ((i + 1) % 2 === 0) {
+                    code -= 2;
+                } else {
+                    code += 1;
+                }
+                
+                let newChar = String.fromCharCode(code);
+                result += newChar;
+                steps += `${original} → ${newChar}\n`;
+            } else if (char === '&') {
+                result += 'n';
+                steps += `& → n\n`;
+            } else if (char === ' ') {
+                result += '-';
+                steps += `Space → -\n`;
+            } else {
+                result += char;
+                steps += `${char} → ${char}\n`;
+            }
+        }
+        let reversedResult = result.split('').reverse().join('');
+        steps += `Reversed: ${reversedResult}`;
+        return { encoded: reversedResult, steps };
+    }
+
+    function displayOutput(text) {
+        let outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = '';
+        let index = 0;
+        function typeEffect() {
+            if (index < text.length) {
+                outputDiv.innerHTML += text[index];
+                index++;
+                setTimeout(typeEffect, 50);
+            }
+        }
+        typeEffect();
+    }
+
+    function displaySteps(text) {
+        let stepsDiv = document.getElementById('steps');
+        stepsDiv.innerHTML = '';
+        let index = 0;
+        function typeEffect() {
+            if (index < text.length) {
+                stepsDiv.innerHTML += text[index];
+                index++;
+                setTimeout(typeEffect, 30);
+            }
+        }
+        typeEffect();
+    }
+
+    function copyToClipboard() {
+        let outputText = document.getElementById('output').innerText.replace("Encoded: ", "");
+        navigator.clipboard.writeText(outputText).then(() => {
+            alert("Copied to clipboard!");
+        });
+    }
+</script>
+
+</body>
+  </html>
